@@ -9,9 +9,12 @@
   "author": "Gennady Yegupov",
   "license": "ISC",
   "bin": {
-    "simple-date": "date.js"
+    "cutedate": "date.js"
   },
   "devDependencies": {
     "eslint": "^8.7.0"
+  },
+  "dependencies": {
+    "yargs": "^17.3.1"
   }
 }
