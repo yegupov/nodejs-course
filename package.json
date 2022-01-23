@@ -1,0 +1,17 @@
+{
+  "name": "nodejs-course",
+  "version": "1.0.0",
+  "description": "Netology Nodejs course 2022",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Gennady Yegupov",
+  "license": "ISC",
+  "bin": {
+    "simple-date": "date.js"
+  },
+  "devDependencies": {
+    "eslint": "^8.7.0"
+  }
+}
