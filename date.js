@@ -26,7 +26,7 @@ const curTime = {
   seconds: today.getSeconds()
 }
 
-console.log('Today = ', today);
+// console.log('Today = ', today);
 // console.log('curTime : ', curTime);
 
 // for (let prop in argv) {
