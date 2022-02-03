@@ -4,14 +4,14 @@
   "description": "Netology Nodejs course 2022",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "dev": "node -r dotenv/config index.js"
   },
   "author": "Gennady Yegupov",
   "license": "ISC",
-  "bin": {
-    "simple-date": "date.js"
-  },
   "devDependencies": {
+    "dotenv": "^15.0.0",
     "eslint": "^8.7.0"
   }
 }

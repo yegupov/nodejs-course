@@ -1,29 +1,19 @@
-# Netology Node.js course 2022
-✰ *Amazing course with fun challenges* ✰
+# Http module
+Домашнее задание к занятию «1.5 http-module. Переменные окружения»  
+Netology Node.js course: [`Backend-разработка на Node.js`](https://netology.ru/programs/nodejs)  
+13.01.2022 - 14.07.2022  
+Author: Gennady Yegupov
 
-Homework and Graduation Project  
-**Course**: [`Backend-разработка на Node.js`](https://netology.ru/programs/nodejs)  
-13.01.2022 - 14.07.2022
+## Задание 1 - Зарегистрироваться на сервисе Weatherstack
+Ознакомиться с документацией API-сервиса weatherstack.  
+Зарегистрируйтесь, выбрав Free (бесплатный) тарифный план, чтобы получить токен для доступа к API.
 
-**Author**: Gennady Yegupov
+## Задание 2 - Разработать консольное приложение «Погода»
+На основе модуля http написать консольное приложение для динамической загрузки данных с API погоды из задания 1.  
+В качестве входных параметров клиент должен принимать название города, для которого требуется вывести прогноз.  
+Токен для доступа к API обязательно должен храниться в переменных окружения **env**  
+Создайте в проекте конфигурационный файл config.js и разместить в нем дефолтные значения всех переменных окружения, используемых при решении задачи.
 
-## Console Utilities
-Домашнее задание к занятию «1.2 Аргументы командной строки и console»  
-**Description**: [`Console Utilities`](https://github.com/yegupov/nodejs-course/blob/console-util/console-utils.md)  
-**Solution**: [`console-util`](https://github.com/yegupov/nodejs-course/tree/console-util)
-
-### Task 1 - Utility to get the current date and time
-**Run utility**  
+### Run utility
 Insert into console:  
-`./date.js current`  
-`./date.js current --year`  
-etc.
-
-https://user-images.githubusercontent.com/44179657/151762325-d75b9d3d-49f8-467f-b4a5-22119c3741ae.mp4
-
-### Task 2 - Game «Guess the number»
-**Run utility**  
-Insert into console:  
-`./guess-number.js`
-
-https://user-images.githubusercontent.com/44179657/151762404-d641c6ac-2724-4853-88ca-0d6d224113fb.mp4
+`npm run dev`
