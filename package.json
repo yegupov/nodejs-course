@@ -4,7 +4,9 @@
   "description": "Netology Nodejs course 2022",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "pm2 start index.js",
+    "dev": "nodemon index.js"
   },
   "author": "Gennady Yegupov",
   "license": "ISC",
@@ -12,6 +14,14 @@
     "simple-date": "date.js"
   },
   "devDependencies": {
-    "eslint": "^8.7.0"
+    "dotenv": "^16.0.0",
+    "eslint": "^8.7.0",
+    "nodemon": "^2.0.15"
+  },
+  "dependencies": {
+    "express": "^4.17.2",
+    "express-form-data": "^2.0.17",
+    "node-unique-id-generator": "^0.1.0",
+    "pm2": "^5.1.2"
   }
 }

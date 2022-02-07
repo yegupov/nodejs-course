@@ -1,29 +1,31 @@
-# Netology Node.js course 2022
-✰ *Amazing course with fun challenges* ✰
+# Library app (Node.js)
+Node.js App «Library»
+Netology Node.js course: [`Backend-разработка на Node.js`](https://netology.ru/programs/nodejs)  
+13.01.2022 - 14.07.2022  
+Author: Gennady Yegupov
 
-Homework and Graduation Project  
-**Course**: [`Backend-разработка на Node.js`](https://netology.ru/programs/nodejs)  
-13.01.2022 - 14.07.2022
+## Task 1 for the lesson «2.1 Express»
+Develop a CRUD API to work with the "book" entity. Each book instance must contain the following data structure:  
+`{  
+  id: "string",  
+  title: "string",  
+  description: "string",  
+  authors: "string",  
+  favorite: "string",  
+  fileCover: "string",  
+  fileName: "string"  
+}`
 
-**Author**: Gennady Yegupov
+### Methods
+| Method | Url             | Action                        | Comment                                                        |
+| ------ | --------------- | ----------------------------- | -------------------------------------------------------------- |
+| POST	 | /api/user/login | авторизация пользователя      | метод всегда возвращает **Code: 201** и статичный объект: { id: 1, mail: "test@mail.ru" } |
+| GET	   | /api/books	     | получить все книги	           | получаем массив всех книг                                      |
+| GET    | /api/books/:id  | получить книгу по **id**      | получаем объект книги, если запись не найдено вернем **Code: 404** |
+| POST   | /api/books      | создать книгу	               | создаем книги и возврашаем ее же вместе с присвоенным **id**   |
+| PUT    | /api/books/:id  | редактировать книгу по **id** | редактируем объект книги, если запись не найдено вернем **Code: 404** |
+| DELETE | /api/books/:id  | удалить книгу по **id**    	 | удаляем книгу и возвращаем ответ: **'ok'**                     |
 
-## Console Utilities
-Домашнее задание к занятию «1.2 Аргументы командной строки и console»  
-**Description**: [`Console Utilities`](https://github.com/yegupov/nodejs-course/blob/console-util/console-utils.md)  
-**Solution**: [`console-util`](https://github.com/yegupov/nodejs-course/tree/console-util)
-
-### Task 1 - Utility to get the current date and time
-**Run utility**  
+### Run App
 Insert into console:  
-`./date.js current`  
-`./date.js current --year`  
-etc.
-
-https://user-images.githubusercontent.com/44179657/151762325-d75b9d3d-49f8-467f-b4a5-22119c3741ae.mp4
-
-### Task 2 - Game «Guess the number»
-**Run utility**  
-Insert into console:  
-`./guess-number.js`
-
-https://user-images.githubusercontent.com/44179657/151762404-d641c6ac-2724-4853-88ca-0d6d224113fb.mp4
+`npm run dev`
