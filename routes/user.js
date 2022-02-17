@@ -8,3 +8,5 @@ router.post('/login', (req, res) => {
     mail: 'test@mail.ru'
   });
 });
+
+module.exports = router;
