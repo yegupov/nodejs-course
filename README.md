@@ -1,10 +1,13 @@
 # Library app (Node.js)
-Node.js App «Library»: Express.js, Ejs-templating, Multer (upload and delete files).
+Node.js App «Library»: Express.js, Ejs-templating, Multer (upload and delete files).  
+View app on Heroku: [`nodexpress-libraryapp`](https://nodexpress-libraryapp.herokuapp.com/)
 
 Netology course: [`Backend-разработка на Node.js`](https://netology.ru/programs/nodejs)  
 13.01.2022 - 14.07.2022  
 Author: Gennady Yegupov  
 My tasks solutions Netology course: [`nodejs-course`](https://github.com/yegupov/nodejs-course/tree/master)
+
+![library-gif-1](https://user-images.githubusercontent.com/44179657/154436316-3eb8645b-8b98-429a-b110-9b235e5a7002.gif)
 
 ## Run App
 Insert into console:  
