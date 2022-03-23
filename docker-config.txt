@@ -1,0 +1,258 @@
+-----------------------------------------------
+Задание 1 - Docker CLI
+-----------------------------------------------
+
+$ docker version
+Client:
+ Cloud integration: v1.0.22
+ Version:           20.10.12
+ API version:       1.41
+ Go version:        go1.16.12
+ Git commit:        e91ed57
+ Built:             Mon Dec 13 11:44:07 2021
+ OS/Arch:           windows/amd64
+ Context:           default
+ Experimental:      true
+
+Server: Docker Desktop 4.5.1 (74721)
+ Engine:
+  Version:          20.10.12
+  API version:      1.41 (minimum version 1.12)
+  Go version:       go1.16.12
+  Git commit:       459d0df
+  Built:            Mon Dec 13 11:43:56 2021
+  OS/Arch:          linux/amd64
+  Experimental:     false
+ containerd:
+  Version:          1.4.12
+  GitCommit:        7b11cfaabd73bb80907dd23182b9347b4245eb5d
+ runc:
+  Version:          1.0.2
+  GitCommit:        v1.0.2-0-g52b36a2
+ docker-init:
+  Version:          0.19.0
+  GitCommit:        de40ad0
+
+
+
+$ docker pull busybox
+Using default tag: latest
+latest: Pulling from library/busybox
+554879bb3004: Pulling fs layer
+554879bb3004: Download complete
+554879bb3004: Pull complete
+Digest: sha256:caa382c432891547782ce7140fb3b7304613d3b0438834dce1cad68896ab110a
+Status: Downloaded newer image for busybox:latest
+docker.io/library/busybox:latest
+
+
+$ docker run --name pinger -i -t alpine ping -c 7 netology.ru
+the input device is not a TTY.  If you are using mintty, try prefixing the command with 'winpty'
+
+
+$ winpty docker run --name pinger -i -t busybox ping -c 7 netology.ru
+PING netology.ru (188.114.98.128): 56 data bytes
+64 bytes from 188.114.98.128: seq=0 ttl=37 time=48.205 ms
+64 bytes from 188.114.98.128: seq=1 ttl=37 time=48.746 ms
+64 bytes from 188.114.98.128: seq=2 ttl=37 time=48.321 ms
+64 bytes from 188.114.98.128: seq=3 ttl=37 time=48.409 ms
+64 bytes from 188.114.98.128: seq=4 ttl=37 time=48.125 ms
+64 bytes from 188.114.98.128: seq=5 ttl=37 time=47.628 ms
+64 bytes from 188.114.98.128: seq=6 ttl=37 time=47.501 ms
+
+--- netology.ru ping statistics ---
+7 packets transmitted, 7 packets received, 0% packet loss
+round-trip min/avg/max = 47.501/48.133/48.746 ms
+
+gegup@Chayka MINGW64 ~
+$ docker ps -a
+CONTAINER ID   IMAGE     COMMAND                  CREATED          STATUS                      PORTS     NAMES
+740029dff964   busybox   "ping -c 7 netology.…"   23 seconds ago   Exited (0) 15 seconds ago             pinger
+
+
+$ docker logs -f -t pinger
+2022-03-15T09:19:05.972664800Z PING netology.ru (188.114.98.128): 56 data bytes
+2022-03-15T09:19:06.021231900Z 64 bytes from 188.114.98.128: seq=0 ttl=37 time=48.205 ms
+2022-03-15T09:19:07.022295500Z 64 bytes from 188.114.98.128: seq=1 ttl=37 time=48.746 ms
+2022-03-15T09:19:08.022153800Z 64 bytes from 188.114.98.128: seq=2 ttl=37 time=48.321 ms
+2022-03-15T09:19:09.022579600Z 64 bytes from 188.114.98.128: seq=3 ttl=37 time=48.409 ms
+2022-03-15T09:19:10.022691700Z 64 bytes from 188.114.98.128: seq=4 ttl=37 time=48.125 ms
+2022-03-15T09:19:11.022424900Z 64 bytes from 188.114.98.128: seq=5 ttl=37 time=47.628 ms
+2022-03-15T09:19:12.022831700Z 64 bytes from 188.114.98.128: seq=6 ttl=37 time=47.501 ms
+2022-03-15T09:19:12.022888400Z
+2022-03-15T09:19:12.022900300Z --- netology.ru ping statistics ---
+2022-03-15T09:19:12.022910900Z 7 packets transmitted, 7 packets received, 0% packet loss
+2022-03-15T09:19:12.022921200Z round-trip min/avg/max = 47.501/48.133/48.746 ms
+
+
+$ docker rm pinger
+pinger
+
+gegup@Chayka MINGW64 ~
+$ docker rmi busybox
+Untagged: busybox:latest
+Untagged: busybox@sha256:caa382c432891547782ce7140fb3b7304613d3b0438834dce1cad68896ab110a
+Deleted: sha256:2fb6fc2d97e10c79983aa10e013824cc7fc8bae50630e32159821197dda95fe3
+Deleted: sha256:797ac4999b67d8c38a596919efa5b7b6a4a8fd5814cb8564efa482c5d8403e6d
+
+
+
+
+-----------------------------------------------
+Задание 2 - Environment Variables
+-----------------------------------------------
+
+$ docker pull node:15.14-alpine
+15.14-alpine: Pulling from library/node
+ddad3d7c1e96: Pull complete
+0e18143e8d4d: Pull complete
+377ad682a98b: Pull complete
+99b3e0ba5237: Pull complete
+Digest: sha256:6edd37368174c15d4cc59395ca2643be8e2a1c9846714bc92c5f5c
+5a92fb8929
+Status: Downloaded newer image for node:15.14-alpine
+docker.io/library/node:15.14-alpine
+
+gegup@Chayka MINGW64 ~
+$ docker images
+REPOSITORY   TAG            IMAGE ID       CREATED         SIZE
+node         15.14-alpine   75631da67663   11 months ago   112MB
+
+
+$ docker run --name mynode -it --env NAME='Gennady' --env SURNAME='Yakupov' node:15.14-alpine sh
+/ # NAME
+sh: NAME: not found
+/ # echo NAME
+NAME
+/ # printenv
+NODE_VERSION=15.14.0
+HOSTNAME=ed3d69cf096a
+YARN_VERSION=1.22.5
+SHLVL=2
+HOME=/root
+NAME=Gennady
+TERM=xterm
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+PWD=/
+SURNAME=Yakupov
+/ #
+
+/ # echo Привет, $NAME $SURNAME!
+Привет, Gennady Yakupov!
+
+/ # exit
+
+gegup@Chayka MINGW64 ~
+$ docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+
+gegup@Chayka MINGW64 ~
+$ docker ps -a
+CONTAINER ID   IMAGE               COMMAND                  CREATED          STATUS                        PORTS     NAMES
+ed3d69cf096a   node:15.14-alpine   "docker-entrypoint.s…"   25 minutes ago   Exited (127) 22 seconds ago             mynode
+
+gegup@Chayka MINGW64 ~
+$ docker rm mynode
+mynode
+
+gegup@Chayka MINGW64 ~
+$ docker ps -a
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+
+gegup@Chayka MINGW64 ~
+$ docker images
+REPOSITORY   TAG            IMAGE ID       CREATED         SIZE
+node         15.14-alpine   75631da67663   11 months ago   112MB
+
+gegup@Chayka MINGW64 ~
+$ docker rmi node:15.14-alpine
+Untagged: node:15.14-alpine
+Untagged: node@sha256:6edd37368174c15d4cc59395ca2643be8e2a1c9846714bc92c5f5c5a92fb8929
+Deleted: sha256:75631da67663db1d5f3518892db3259b52f105d4b692f88cf2457a0b27abf0e1
+Deleted: sha256:158a0c9086736df897b2be3838b3acd39c6258d5f564f601dcc23e5ed9fd1a88
+Deleted: sha256:7ff49c61cfd4cd0e2d3fc07f81904c5e19b7ea96b715db515dbe396a86dd01f2
+Deleted: sha256:06a84147b938c0ea306dc5d0a632b708a4e73c6de82a6ca2de1c0a95338f98b9
+Deleted: sha256:9a5d14f9f5503e55088666beef7e85a8d9625d4fa7418e2fe269e9c54bcb853c
+
+gegup@Chayka MINGW64 ~
+$ docker images
+REPOSITORY   TAG       IMAGE ID   CREATED   SIZE
+
+
+
+
+-----------------------------------------------
+Задание 3 - Volumes
+-----------------------------------------------
+
+PS C:\Windows\system32> docker images
+REPOSITORY   TAG       IMAGE ID   CREATED   SIZE
+
+PS C:\Windows\system32> docker pull node:15.14-alpine
+15.14-alpine: Pulling from library/node
+ddad3d7c1e96: Pull complete
+0e18143e8d4d: Pull complete
+377ad682a98b: Pull complete
+99b3e0ba5237: Pull complete
+Digest: sha256:6edd37368174c15d4cc59395ca2643be8e2a1c9846714bc92c5f5c5a92fb8929
+Status: Downloaded newer image for node:15.14-alpine
+docker.io/library/node:15.14-alpine
+
+PS C:\Windows\system32> docker run -it -d --name first_node -v C:\dockerless\data:/var/first/data node:15.14-alpine
+bd596dc2ef591d7eb98e74bb7f0c29b3a16f741e5dbd9c62534c8880037f48ec
+
+PS C:\Windows\system32> docker run -it -d --name second_node -v C:\dockerless\data:/var/second/data node:15.14-alpine
+b6e424e84242ab3fdc85406de62b44b861c0763f54c03db6138b2ac57b59e94b
+
+PS C:\Windows\system32> docker exec first_node touch /var/first/data/first_node.txt
+
+PS C:\Windows\system32> docker exec -it first_node sh
+/ # echo "Example first node" >/var/first/data/first_node.txt
+/ # cat /var/first/data/first_node.txt
+Example first node
+/ # cd /var/first/data
+/var/first/data # ls
+first_node.txt  netology.txt
+/var/first/data # exit
+
+PS C:\Windows\system32> docker exec -it second_node sh
+/ # cd /var/second/data
+/var/second/data # ls
+first_node.txt  netology.txt
+/var/second/data # cat first_node.txt
+Example first node
+/var/second/data # exit
+
+PS C:\Windows\system32> docker stop first_node
+first_node
+
+PS C:\Windows\system32> docker stop second_node
+second_node
+
+PS C:\Windows\system32> docker ps -a
+CONTAINER ID   IMAGE               COMMAND                  CREATED          STATUS                        PORTS     NAMES
+b6e424e84242   node:15.14-alpine   "docker-entrypoint.s…"   10 minutes ago   Exited (137) 11 seconds ago             second_node
+bd596dc2ef59   node:15.14-alpine   "docker-entrypoint.s…"   13 minutes ago   Exited (137) 44 seconds ago             first_node
+
+PS C:\Windows\system32> docker rm first_node
+first_node
+
+PS C:\Windows\system32> docker rm second_node
+second_node
+
+PS C:\Windows\system32> docker ps -a
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+
+PS C:\Windows\system32> docker rmi node:15.14-alpine
+Untagged: node:15.14-alpine
+Untagged: node@sha256:6edd37368174c15d4cc59395ca2643be8e2a1c9846714bc92c5f5c5a92fb8929
+Deleted: sha256:75631da67663db1d5f3518892db3259b52f105d4b692f88cf2457a0b27abf0e1
+Deleted: sha256:158a0c9086736df897b2be3838b3acd39c6258d5f564f601dcc23e5ed9fd1a88
+Deleted: sha256:7ff49c61cfd4cd0e2d3fc07f81904c5e19b7ea96b715db515dbe396a86dd01f2
+Deleted: sha256:06a84147b938c0ea306dc5d0a632b708a4e73c6de82a6ca2de1c0a95338f98b9
+Deleted: sha256:9a5d14f9f5503e55088666beef7e85a8d9625d4fa7418e2fe269e9c54bcb853c
+
+PS C:\Windows\system32> docker images
+REPOSITORY   TAG       IMAGE ID   CREATED   SIZE
+
+PS C:\Windows\system32>

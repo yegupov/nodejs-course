@@ -1,4 +1,4 @@
-# Library app (Node.js)
+# Library app (Node.js) / Docker
 Node.js App «Library»: Express.js, Ejs-templating, Multer (upload and delete files).  
 View app on Heroku: [`nodexpress-libraryapp`](https://nodexpress-libraryapp.herokuapp.com/)
 
@@ -7,6 +7,10 @@ Netology course: [`Backend-разработка на Node.js`](https://netology.
 Author: Gennady Yegupov  
 My tasks solutions Netology course: [`nodejs-course`](https://github.com/yegupov/nodejs-course/tree/master)
 
+## Task for the lesson «2.4 Docker, установка и настройка»
+My task solution: [`Docker config`](https://github.com/yegupov/nodejs-course/blob/docker/docker-config.txt)
+
+## Library app Screenshots
 ![library-gif-1](https://user-images.githubusercontent.com/44179657/154436316-3eb8645b-8b98-429a-b110-9b235e5a7002.gif)
 
 ## Run App
