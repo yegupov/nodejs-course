@@ -1,17 +1,19 @@
 <%- include("../partials/layout-start", {title: title}) %>
 <%- include("../partials/menu") %>
-<h1 class="mt-5 mb-5"><%= title %></h1>
+<h1 class="mt-5"><%= title %></h1>
+<p class="mb-5">Backend</p>
 
-<a class="btn btn-sm btn-primary" href="books/create">Добавить запись</a>
+<a class="btn btn-sm btn-primary" href="api/books/create">Добавить запись</a>
 
 <% if(books.length) { %>
-    <table class="table table-striped table-sm  mt-3">
+    <table class="table table-striped table-sm mt-3">
         <thead>
         <tr>
             <th scope="col">№</th>
             <th scope="col">Изображение</th>
             <th scope="col">Заголовок</th>
             <th scope="col">Авторы</th>
+            <th scope="col">Просмотры</th>
             <th scope="col"></th>
         </tr>
         </thead>
@@ -22,18 +24,19 @@
                 <td class="pt-3">
                   <% if (el.fileBook) { %>
                     <img src="/public/img/<%= el.fileBook %>" style="width:60px;margin-top:-10px" alt="<%= el.title %>">
-                  <% } %>                  
+                  <% } %>
                 </td>
                 <td class="pt-3"><%= el.title %></td>
                 <td class="pt-3"><%= el.authors %></td>
-                <td class="text-right pt-3 pr-3">
-                    <a class="btn btn-sm btn-success" href="/books/<%= el.id %>">
+                <td class="pt-3">0</td>
+                <td class="text-right pt-3 pr-3" style="min-width:150px;">
+                    <a class="btn btn-sm btn-success" href="/api/books/<%= el.id %>">
                         <i class="fa fa-eye" aria-hidden="true"></i>
                     </a>
-                    <a class="btn btn-sm btn-primary" href="/books/update/<%= el.id %>">
+                    <a class="btn btn-sm btn-primary" href="/api/books/update/<%= el.id %>">
                         <i class="fa fa-pencil" aria-hidden="true"></i>
                     </a>
-                    <form action="/books/delete/<%= el.id %>" method="POST" class="d-inline">
+                    <form action="/api/books/delete/<%= el.id %>" method="POST" class="d-inline">
                         <button class="btn btn-sm btn-danger">
                             <i class="fa fa-trash" aria-hidden="true"></i>
                         </button>

@@ -1,0 +1,19 @@
+version: "3.9"
+services:
+  storage:
+    image: redis
+    volumes:
+      - logs_data:/var/log
+  counter:
+    build: ./counter
+    volumes:
+      - ./counter:/app
+    ports:
+      - 80:3001
+    environment:
+      - PORT=3001
+      - STORAGE_URL=storage
+    links:
+      - storage
+volumes:
+  logs_data: {}

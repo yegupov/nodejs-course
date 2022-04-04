@@ -2,12 +2,13 @@ const express = require('express');
 const router = express.Router();
 const {Book} = require('../../models');
 const fileMiddleware = require('../../middleware/file');
+// const counter = require('../../counter');
 
 const store = {
   books: [
     {
       id: '001',
-      title: 'Node.js в действии.',
+      title: 'Node.js в действии',
       authors: 'Майк Кантелон',
       description: 'Цель данной книги — быстро овладеть основами Node.js, помочь вам начать разработку приложений и научить всему, что необходимо знать о "продвинутом" JavaScript.',
       favorite: 'favorite',
@@ -17,7 +18,7 @@ const store = {
     },
     {
       id: '002',
-      title: 'Секреты JavaScript ниндзя.',
+      title: 'Секреты JavaScript ниндзя',
       authors: 'Джон Резиг, Беэр Бибо, Иосип Марас',
       description: 'Написание более эффективного кода с помощью функций, объектов и замыканий. Преодоление скрытых препятствий, которые таит в себе разработка веб-приложений на JavaScript.',
       favorite: 'favorite',
@@ -27,7 +28,7 @@ const store = {
     },
     {
       id: '003',
-      title: 'Javascript на примерах. Практика, практика и только практика.',
+      title: 'Javascript на примерах. Практика, практика и только практика',
       authors: 'А. Никольский',
       description: 'Эта книга является превосходным учебным пособием для изучения языка программирования J avaScript на примерах. Изложение ведется последовательно: от написания первой программы, до создания полноценных проектов: интерактивных элементов (типа слайдера, диалоговых окон) интернет-магазина, лендинговой страницы и проч.',
       favorite: 'favorite',
@@ -35,29 +36,26 @@ const store = {
       fileName: '2022-02-06-javascript_na_primerax',
       fileBook: '2022-02-06-javascript_na_primerax.jpg'
     }
-  ]
+  ],
 };
 
 router.get('/', (req, res) => {
   const {books} = store;
-  res.json(books);
+  res.render("books/index", {
+    title: "Books list",
+    books
+  });
 });
 
-router.get('/:id', (req, res) => {
-  const {books} = store;
-  const {id} = req.params;
-  const idx = books.findIndex(el => el.id === id);
-
-  if (idx !== -1) {
-    res.json(books[idx]);
-  } else {
-    res.status(404);
-    res.json("Library App | Not found");
-  }
+router.get('/create', (req, res) => {
+    res.render("books/create", {
+        title: "Books | create",
+        book: {},
+    });
 });
 
 router.post(
-  '/',
+  '/create',
   fileMiddleware.upload.single('coverimg'),
   (req, res) => {
     const {books} = store;
@@ -66,38 +64,98 @@ router.post(
         fileName = '',
         fileBook = '';
     if (req.file) {
-      fileBook = req.file; // file path: my-image.jpg
+      fileBook = req.file.filename; // file path: '2022-02-16T13-42-19-book-1.jpg'
       console.log(fileBook);
 
-      fileCover = fileBook.split('.').pop().join('.');
-      fileName = `${new Date().toISOString().replace(/:/g, '-')}-${fileCover}`;
+      fileBookParts = fileBook.split('.');
+      fileBookParts.pop();
+      fileCover = fileBookParts.join('.');
+      fileName = `${(new Date().toISOString().replace(/:/g, '-')).slice(0, -5)}-${fileCover}`;
     }
 
     const {title, authors, description, favorite} = req.body;
 
     const newBook = new Book(title, authors, description, favorite, fileCover, fileName, fileBook);
     books.push(newBook);
+    // console.log('newBook : ', newBook);
 
     res.status(201);
-    res.json(newBook);
+
+    res.redirect('/books')
   }
 );
 
-router.put(
+router.get(
   '/:id',
-  fileMiddleware.upload.single('coverimg'),
+  // counter,
   (req, res) => {
     const {books} = store;
+    const {id} = req.params;
+    const idx = books.findIndex(el => el.id === id);
 
-    let fileCover = '',
-        fileName = '',
-        fileBook = '';
+    if (idx !== -1) {
+      res.render("books/view", {
+        title: "Books | View",
+        book: books[idx],
+      });
+    } else {
+      res.status(404).redirect('/404');
+    }
+  }
+);
+
+router.get('/update/:id', (req, res) => {
+  const {books} = store;
+  const {id} = req.params;
+  const idx = books.findIndex(el => el.id === id);
+
+  if (idx !== -1) {
+    res.render("books/update", {
+      title: "Books | Update",
+      book: books[idx],
+    });
+  } else {
+    res.status(404).redirect('/404');
+  }
+});
+
+router.post(
+  '/update/:id',
+  fileMiddleware.upload.single('coverimg'),
+  (req, res) => {
+    console.log('req.body : ', req.body);
+    console.log('req.file : ', req.file);
+    /*
+    req.file :  {
+      fieldname: 'coverimg',
+      originalname: 'book-1.jpg',
+      encoding: '7bit',
+      mimetype: 'image/jpeg',
+      destination: 'D:\\Dev\\TrainingProjects\\nodejs-course\\public\\img',
+      filename: '2022-02-16T13-42-19-book-1.jpg',
+      path: 'D:\\Dev\\TrainingProjects\\nodejs-course\\public\\img\\2022-02-16T13-42-19-book-1.jpg',
+      size: 28890
+    } */
+
+    const {books} = store;
+
+    let fileCover = req.body.fileCover,
+        fileName = req.body.fileName,
+        fileBook = req.body.fileBook;
+
     if (req.file) {
-      fileBook = req.file; // file path: my-image.jpg
+      console.log('Need delete Old file : ', fileBook);
+      fileMiddleware.delete(fileBook);
+      fileBook = req.file.filename; // file path: '2022-02-16T13-42-19-book-1.jpg'
       console.log(fileBook);
 
-      fileCover = fileBook.split('.').pop().join('.');
+      // fileCover = fileBook.split('.').pop().join('.');
+
+      fileBookParts = fileBook.split('.');
+      fileBookParts.pop();
+      fileCover = fileBookParts.join('.');
       fileName = `${(new Date().toISOString().replace(/:/g, '-')).slice(0, -5)}-${fileCover}`;
+      console.log('fileCover / fileName : ', fileCover, fileName);
     }
 
     const {title, authors, description, favorite} = req.body;
@@ -115,37 +173,27 @@ router.put(
         fileName,
         fileBook
       };
-      res.json(books[idx]);
+      res.redirect(`/books/${id}`);
     } else {
-        res.status(404);
-        res.json("Library App | Not found");
+      res.status(404).redirect('/404');
     }
   }
 );
 
-router.delete('/:id', (req, res) => {
+router.post('/delete/:id', (req, res) => {
   const {books} = store;
   const {id} = req.params;
   const idx = books.findIndex(el => el.id === id);
 
-  if (idx !== -1) {
-    books.splice(idx, 1);
-    res.json(true);
-  } else {
-    res.status(404);
-    res.json("Library App | Not found");
-  }
-});
+  // console.log('File Book deleted : ', books[idx]['fileBook']);
 
-// загрузка файлов
-router.get('/:id/download', (req, res) => {
-  const {fileCover, fileBook} = req.body,
-        extension = fileBook.split('.').pop();
-  res.download(__dirname+`/../../public/img/${fileBook}`, `${fileCover}.${extension}`, err=>{
-    if (err) {
-      res.status(404).json();
-    }
-  });
+  if (idx !== -1) {
+    fileMiddleware.delete(books[idx]['fileBook']);
+    books.splice(idx, 1);
+    res.redirect(`/books`);
+  } else {
+    res.status(404).redirect('/404');
+  }
 });
 
 module.exports = router;

@@ -7,4 +7,10 @@ router.get('/', (req, res) => {
     });
 });
 
+router.get('/contact', (req, res) => {
+    res.render("contact", {
+      title: "Library | Contact page"
+    });
+});
+
 module.exports = router;

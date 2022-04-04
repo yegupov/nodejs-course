@@ -4,10 +4,10 @@ const bodyParser = require("body-parser");
 
 const errorMiddleware = require('./middleware/error');
 
-const indexRouter = require('./routes/index');
+const frontRouter = require('./routes/index');
+// const contactRouter = require('./routes/contact');
+const userApiRouter = require('./routes/api/user');
 const booksApiRouter = require('./routes/api/books');
-const booksRouter = require('./routes/books');
-const userApiRouter = require('./routes/user');
 
 const app = express();
 
@@ -20,8 +20,8 @@ app.set("view engine", "ejs");
 
 app.use('/public', express.static(__dirname+"/public"));
 
-app.use('/', indexRouter);
-app.use('/books', booksRouter);
+app.use('/', frontRouter);
+// app.use('/contact', contactRouter);
 app.use('/api/books', booksApiRouter);
 app.use('/api/user', userApiRouter);
 
