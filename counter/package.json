@@ -1,0 +1,16 @@
+{
+  "name": "counter",
+  "version": "1.0.0",
+  "description": "Counter for view book pages.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "Gennady Yegupov",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.3"
+  }
+}

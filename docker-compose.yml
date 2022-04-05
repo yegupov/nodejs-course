@@ -1,19 +1,22 @@
-version: "3.9"
+version: "3"
 services:
-  storage:
-    image: redis
+  library:
+    container_name: libraryapp
+    restart: always
+    build: ./library
     volumes:
-      - logs_data:/var/log
+      - ./library:/library
+    ports:
+      - 3000:3000 # first number is your port from local machine, second is for container
+    environment:
+      - PORT=3000
+    depends_on:
+      - counter
   counter:
+    container_name: counterapp
+    restart: always
     build: ./counter
     volumes:
-      - ./counter:/app
+      - ./counter:/counter
     ports:
-      - 80:3001
-    environment:
-      - PORT=3001
-      - STORAGE_URL=storage
-    links:
-      - storage
-volumes:
-  logs_data: {}
+      - 3002:3002
