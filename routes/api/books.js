@@ -1,151 +1,150 @@
 const express = require('express');
 const router = express.Router();
-const {Book} = require('../../models');
+const Book = require('../../models/book');
 const fileMiddleware = require('../../middleware/file');
 
-const store = {
-  books: [
-    {
-      id: '001',
-      title: 'Node.js в действии.',
-      authors: 'Майк Кантелон',
-      description: 'Цель данной книги — быстро овладеть основами Node.js, помочь вам начать разработку приложений и научить всему, что необходимо знать о "продвинутом" JavaScript.',
-      favorite: 'favorite',
-      fileCover: 'node_js_v_dejstvii',
-      fileName: '2022-02-06-node_js_v_dejstvii',
-      fileBook: '2022-02-06-node_js_v_dejstvii.jpg'
-    },
-    {
-      id: '002',
-      title: 'Секреты JavaScript ниндзя.',
-      authors: 'Джон Резиг, Беэр Бибо, Иосип Марас',
-      description: 'Написание более эффективного кода с помощью функций, объектов и замыканий. Преодоление скрытых препятствий, которые таит в себе разработка веб-приложений на JavaScript.',
-      favorite: 'favorite',
-      fileCover: 'sekrety_ja',
-      fileName: '2022-02-06-sekrety_ja',
-      fileBook: '2022-02-06-sekrety_ja.jpg'
-    },
-    {
-      id: '003',
-      title: 'Javascript на примерах. Практика, практика и только практика.',
-      authors: 'А. Никольский',
-      description: 'Эта книга является превосходным учебным пособием для изучения языка программирования J avaScript на примерах. Изложение ведется последовательно: от написания первой программы, до создания полноценных проектов: интерактивных элементов (типа слайдера, диалоговых окон) интернет-магазина, лендинговой страницы и проч.',
-      favorite: 'favorite',
-      fileCover: 'javascript_na_primerax',
-      fileName: '2022-02-06-javascript_na_primerax',
-      fileBook: '2022-02-06-javascript_na_primerax.jpg'
-    }
-  ]
-};
-
-router.get('/', (req, res) => {
-  const {books} = store;
-  res.json(books);
-});
-
-router.get('/:id', (req, res) => {
-  const {books} = store;
-  const {id} = req.params;
-  const idx = books.findIndex(el => el.id === id);
-
-  if (idx !== -1) {
-    res.json(books[idx]);
-  } else {
-    res.status(404);
-    res.json("Library App | Not found");
+router.get('/', async (req, res) => {
+  let books;
+  // books = await Book.find().select('-__v');
+  try {
+    books = await Book.find().select('-__v');
+  } catch (e) {
+    res.status(500).json(e)
   }
-});
 
-router.post(
-  '/',
-  fileMiddleware.upload.single('coverimg'),
-  (req, res) => {
-    const {books} = store;
-
-    let fileCover = '',
-        fileName = '',
-        fileBook = '';
-    if (req.file) {
-      fileBook = req.file; // file path: my-image.jpg
-      console.log(fileBook);
-
-      fileCover = fileBook.split('.').pop().join('.');
-      fileName = `${new Date().toISOString().replace(/:/g, '-')}-${fileCover}`;
-    }
-
-    const {title, authors, description, favorite} = req.body;
-
-    const newBook = new Book(title, authors, description, favorite, fileCover, fileName, fileBook);
-    books.push(newBook);
-
-    res.status(201);
-    res.json(newBook);
-  }
-);
-
-router.put(
-  '/:id',
-  fileMiddleware.upload.single('coverimg'),
-  (req, res) => {
-    const {books} = store;
-
-    let fileCover = '',
-        fileName = '',
-        fileBook = '';
-    if (req.file) {
-      fileBook = req.file; // file path: my-image.jpg
-      console.log(fileBook);
-
-      fileCover = fileBook.split('.').pop().join('.');
-      fileName = `${(new Date().toISOString().replace(/:/g, '-')).slice(0, -5)}-${fileCover}`;
-    }
-
-    const {title, authors, description, favorite} = req.body;
-    const {id} = req.params;
-    const idx = books.findIndex(el => el.id === id);
-
-    if (idx !== -1) {
-      books[idx] = {
-        ...books[idx],
-        title,
-        authors,
-        description,
-        favorite,
-        fileCover,
-        fileName,
-        fileBook
-      };
-      res.json(books[idx]);
-    } else {
-        res.status(404);
-        res.json("Library App | Not found");
-    }
-  }
-);
-
-router.delete('/:id', (req, res) => {
-  const {books} = store;
-  const {id} = req.params;
-  const idx = books.findIndex(el => el.id === id);
-
-  if (idx !== -1) {
-    books.splice(idx, 1);
-    res.json(true);
-  } else {
-    res.status(404);
-    res.json("Library App | Not found");
-  }
-});
-
-// загрузка файлов
-router.get('/:id/download', (req, res) => {
-  const {fileCover, fileBook} = req.body,
-        extension = fileBook.split('.').pop();
-  res.download(__dirname+`/../../public/img/${fileBook}`, `${fileCover}.${extension}`, err=>{
-    if (err) {
-      res.status(404).json();
-    }
+  res.render("books/index", {
+    title: "Books list",
+    books: books
   });
+});
+
+// CREATE render page
+router.get('/create', (req, res) => {
+  res.render("books/create", {
+    title: "Books | create",
+    book: {},
+  });
+});
+
+// CREATE and Save new book
+router.post(
+  '/create',
+  fileMiddleware.upload.single('coverimg'),
+  async (req, res) => {
+
+    const {title, authors, description, favorite} = req.body;
+    let fileCover = '',
+        fileName = '';
+
+    if (req.file) {
+      fileName = req.file; // file path: my-image.jpg
+      console.log(fileName);
+
+      fileCover = fileName.split('.').pop().join('.');
+      fileName = `${new Date().toISOString().replace(/:/g, '-')}-${fileName}`;
+    }
+
+    const newBook = new Book({
+      title,
+      authors,
+      description,
+      favorite,
+      fileCover,
+      fileName
+    });
+
+    try {
+      await newBook.save();
+      res.redirect('/api/books');
+      // res.json(newBook);
+    } catch (e) {
+      console.error(e);
+      res.status(500).json();
+    }
+  }
+);
+
+// READ - Get one book data and render page
+router.get('/:id', async (req, res) => {
+  const {id} = req.params;
+  let book;
+
+  try {
+    book = await Book.findById(id).select('-__v');
+    // res.json(book);
+  } catch (e) {
+    console.error(e);
+    res.status(404).redirect('/404');
+  }
+
+  res.render("books/view", {
+    title: "Books | View",
+    book: book
+  });
+});
+
+// UPDATE page render
+router.get('/update/:id', async (req, res) => {
+  const {id} = req.params;
+  let book;
+
+  try {
+    book = await Book.findById(id);
+  } catch (e) {
+    console.error(e);
+    res.status(404).redirect('/404');
+  }
+
+  res.render("books/update", {
+    title: "Books | Update",
+    book: book
+  });
+});
+
+// UPDATE book and Save
+router.post(
+  '/update/:id',
+  fileMiddleware.upload.single('coverimg'),
+  async (req, res) => {
+
+    const {id} = req.params;
+    const {title, authors, description, favorite} = req.body;
+    let book,
+        fileCover = '',
+        fileName = '';
+
+    if (req.file) {
+      fileName = req.file; // file path: my-image.jpg
+      console.log(fileName);
+
+      fileCover = fileName.split('.').pop().join('.');
+      fileName = `${(new Date().toISOString().replace(/:/g, '-')).slice(0, -5)}-${fileName}`;
+    }
+
+    try {
+      await Book.findByIdAndUpdate(id, {title, authors, description, favorite, fileCover, fileName});
+    } catch (e) {
+      console.error(e);
+      res.status(404).redirect('/404');
+    }
+
+    res.redirect(`/api/books/${id}`);
+  }
+);
+
+// DELETE book
+router.post('/delete/:id', async (req, res) => {
+  const {id} = req.params;
+
+  try {
+    await Book.deleteOne({_id: id});
+    // res.json(true);
+  } catch (e) {
+    console.error(e);
+    res.status(404).redirect('/404');
+  }
+
+  res.redirect(`/api/books`);
 });
 
 module.exports = router;
