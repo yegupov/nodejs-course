@@ -6,6 +6,7 @@ COPY ./package*.json ./
 
 RUN npm install
 
+COPY config/ ./config
 COPY middleware/ ./middleware
 COPY models/ ./models
 COPY public/ ./public

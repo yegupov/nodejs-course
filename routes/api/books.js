@@ -2,10 +2,17 @@ const express = require('express');
 const router = express.Router();
 const Book = require('../../models/book');
 const fileMiddleware = require('../../middleware/file');
+// const db = require('../../db');
 
 router.get('/', async (req, res) => {
   let books;
   // books = await Book.find().select('-__v');
+  if (req.isAuthenticated()) {
+    console.log('User Authenticated');
+  } else {
+    console.log('User Not Authenticated');
+  }
+
   try {
     books = await Book.find().select('-__v');
   } catch (e) {
@@ -14,7 +21,8 @@ router.get('/', async (req, res) => {
 
   res.render("books/index", {
     title: "Books list",
-    books: books
+    books: books,
+    user: req.user
   });
 });
 

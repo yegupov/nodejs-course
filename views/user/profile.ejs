@@ -1,0 +1,16 @@
+<%- include("../partials/layout-start", {title: title}) %>
+<%- include("../partials/menu") %>
+
+<p class="mt-5 mb-5"><a href="/api/books">← Back to Admin-panel</a></p>
+
+<p>
+    ID: <%= user.id %><br />
+    Username: <%= user.username %><br />
+    Name: <%= user.displayName %><br />
+    <% if (user.emails) { %>
+        Email: <%= user.emails[0].value %><br />
+    <% } %>
+</p>
+<a class="btn btn-sm btn-dark" href="/api/user/logout">Log out</a>
+
+<%- include("../partials/layout-end") %>
