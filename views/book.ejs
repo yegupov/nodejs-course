@@ -50,11 +50,7 @@
           </div>
 
           <h2 class="mt-4 mb-1">Comments list</h2>
-          <ul id="commentList" class="comments__list">
-            <li>message 1</li>
-            <li>comment</li>
-            <li>message 3</li>
-          </ul>
+          <ul id="commentList" class="comments__list"></ul>
 
         </div>
       <% } %>
@@ -66,7 +62,8 @@
 <script src="/socket.io/socket.io.js"></script>
 
 <script>
-  const socket = io.connect('http://localhost:3000/' + book.id);
+  // const socket = io.connect('http://localhost:3000/' + book.id);
+  const socket = io.connect('http://localhost:3000/');
   const commentList = document.querySelector('#commentList');
   const inputUserName = document.querySelector('#userName');
   const inputCommentText = document.querySelector('#commentText');
@@ -74,21 +71,44 @@
 
   console.log('Comment system :-)');
 
-  btnSendComment.addEventListener('click', () => {
-    console.log('inputUserName.value : ', inputUserName.value);
-    console.log('inputCommentText.value : ', inputCommentText.value);
+  btnSendComment.addEventListener('click', (e) => {
+    e.preventDefault()
+    let author = inputUserName.value,
+        comment = inputCommentText.value
+    if(!comment) {
+      return
+    }
+    postComment(author, comment)
 
+  });
+
+  socket.on('comment', ({author, comment}) => {
+    console.log(`Client msg: ${author}, ${comment}`);
+    appendToDom({author, comment})
+  });
+
+  function postComment(author, comment) {
+    console.log('Author : ', author);
+    console.log('Comment Text : ', comment);
+    // Append to dom
+    appendToDom({author, comment})
+    inputCommentText.value = ''
+    // Broadcast
     socket.emit('comment', {
-      author: inputUserName.value,
-      message: inputCommentText.value,
+      author,
+      comment
     });
-  });
+  }
 
-  socket.on('comment', ({author, message}) => {
-    console.log(`Client msg: ${author}, ${message}`);
-  });
+  function appendToDom(data) {
+    let liTag = document.createElement('li')
+    liTag.classList.add('comments__item')
 
+    let markup = `<b>Author</b>: ${data.author}<br/><b>Comment</b>: ${data.comment}`
+    liTag.innerHTML = markup
 
+    commentList.append(liTag)
+  }
 </script>
 
 <%- include("./partials/layout-end") %>

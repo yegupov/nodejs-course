@@ -20,7 +20,7 @@ router.get('/', async (req, res) => {
 });
 
 // READ - Get one book data and render page
-router.get('/:id', async (req, res) => {
+router.get('/books/:id', async (req, res) => {
   const {id} = req.params
   let book
 
@@ -28,7 +28,7 @@ router.get('/:id', async (req, res) => {
     book = await Book.findById(id).select('-__v')
   } catch (e) {
     console.error(e);
-    res.status(404).redirect('/404');
+    // res.status(404).redirect('/404');
   }
 
   res.render("book", {

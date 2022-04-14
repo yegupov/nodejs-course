@@ -24,6 +24,13 @@ Then start the server:
 Navigate to: [`http://localhost:3000`](http://localhost:3000).  
 Mongo Express to: [`http://localhost:8081`](http://localhost:8081/).
 
+## Task for the lesson «2.9 Протокол websocket. Библиотека socket.io»
+На странице просмотра книги разработать функционал для ее обсуждения в комментариях с использованием Socket.IO
+
+1. Зарегистрироваться и войти: [`Sign up`](http://localhost:3000/api/user/signup)
+2. Добавить пару книг: [`Admin-panel`](http://localhost:3000/api/books)
+4. С [`Главной`](http://localhost:3000) перейти на страницу отдельной книги и оставить комментарий.
+
 ## Task for the lesson «2.8 Аутентификация. PassportJS»
 
 1. Реализуйте API:
