@@ -18,10 +18,10 @@ $ cd nodejs-course
 $ npm install
 ```
 
-Then start the server:
+Then start the server:  
 `$ docker-compose up`
 
-Navigate to: [`http://localhost:3000`](http://localhost:3000).
+Navigate to: [`http://localhost:3000`](http://localhost:3000).  
 Mongo Express to: [`http://localhost:8081`](http://localhost:8081/).
 
 ## Task for the lesson «2.8 Аутентификация. PassportJS»

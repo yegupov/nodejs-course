@@ -1,0 +1,94 @@
+<%- include("./partials/layout-start", {title: title, book: book}) %>
+<%- include("./partials/menu") %>
+
+<div class="row">
+    <div class="col-sm-8">
+
+      <a style="float:right; margin-top:60px" href="/">← Back to Home</a>
+
+      <% if(book) { %>
+      <h1 class="mt-5 mb-5"><%= title %> <%= book.title %></h1>
+
+        <div class="card">
+
+          <div class="card-horizontal" style="padding:30px 30px 20px;display: flex;flex: 1 1 auto;">
+              <div class="img-square-wrapper">
+                <% if(book.fileName) { %>
+                <img src="/public/img/<%= book.fileName %>" style="width:150px;margin-top:25px" alt="<%= book.title %>">
+                <% } %>
+              </div>
+
+              <div class="card-body">
+
+                  <h5 class="card-title"><%= book.title %> <% if(book.favorite) { %>(<%= book.favorite %>)<% } %></h5>
+                  <p class="card-text"><%= book.authors %></p>
+                  <p class="card-text"><%= book.description %></p>
+
+              </div>
+          </div>
+
+        </div> <!-- END card -->
+
+        <div class="comments mb-5 pb-5">
+
+          <h2 class="mt-5 mb-1">Comments</h2>
+
+          <div class="row">
+            <div class="col-sm-8">
+
+              <div class="form-group">
+                <label for="userName">Your name:</label>
+                <input placeholder="username" type="text" id="userName" class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="commentText">Comment:</label>
+                <textarea placeholder="Your comment . . ." class="form-control" id="commentText"></textarea>
+              </div>
+              <button type="submit" id="sendComment" class="btn btn-primary">Send</button>
+
+            </div>
+          </div>
+
+          <h2 class="mt-4 mb-1">Comments list</h2>
+          <ul id="commentList" class="comments__list">
+            <li>message 1</li>
+            <li>comment</li>
+            <li>message 3</li>
+          </ul>
+
+        </div>
+      <% } %>
+
+    </div>
+</div>
+
+<!--Подключаем скрипт сгенерированный socket.io-->
+<script src="/socket.io/socket.io.js"></script>
+
+<script>
+  const socket = io.connect('http://localhost:3000/' + book.id);
+  const commentList = document.querySelector('#commentList');
+  const inputUserName = document.querySelector('#userName');
+  const inputCommentText = document.querySelector('#commentText');
+  const btnSendComment = document.querySelector('#sendComment');
+
+  console.log('Comment system :-)');
+
+  btnSendComment.addEventListener('click', () => {
+    console.log('inputUserName.value : ', inputUserName.value);
+    console.log('inputCommentText.value : ', inputCommentText.value);
+
+    socket.emit('comment', {
+      author: inputUserName.value,
+      message: inputCommentText.value,
+    });
+  });
+
+  socket.on('comment', ({author, message}) => {
+    console.log(`Client msg: ${author}, ${message}`);
+  });
+
+
+</script>
+
+<%- include("./partials/layout-end") %>

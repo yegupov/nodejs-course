@@ -10,6 +10,7 @@ const errorMiddleware         = require('./middleware/error')
 const frontRouter             = require('./routes/index')
 const userApiRouter           = require('./routes/api/user')
 const booksApiRouter          = require('./routes/api/books')
+const socket                  = require('socket.io')
 
 const PORT = process.env.PORT || 3000
 const UserDB = process.env.DB_USERNAME || 'root'
@@ -54,8 +55,38 @@ async function start() {
       useUnifiedTopology: true
     });
 
-    app.listen(PORT, () => {
+    const server = app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);
+
+      // Socket
+      const io = socket(server)
+      io.on('connection', (socket) => {
+          const {id} = socket;
+          console.log(`Socket connected: ${id}`);
+
+          // Recieve event - сообщение для всех
+          socket.on('comment', (data) => {
+            console.log('Comment data : ', data);
+            // data.time = Date()
+            socket.broadcast.emit('comment', data)
+          })
+
+          // socket.on('typing', (data) => {
+          //   socket.broadcast.emit('typing', data)
+          // })
+
+          // socket.on('message-to-all', (author, msg) => {
+          //   console.log(`Server msg: ${author}, ${message}`);
+          //   msg.type = 'all';
+          //   socket.broadcast.emit('message-to-all', msg);
+          //   socket.emit('message-to-all', msg);
+          // });
+
+          socket.on('disconnect', () => {
+            console.log(`Socket disconnected: ${id}`);
+          });
+      });
+
     })
   } catch (e) {
     console.log(e);
